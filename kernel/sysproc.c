@@ -108,12 +108,25 @@ sys_info(void)
 	}
 	return -1;
 }
-//uint64
-//sys_procinfo(void)
-//{
-//
-//	struct procinfo *p;
-//	struct procinfo *ans = procinfo(p);
-//	printf("PPID: %d\n", ans->ppid);
-//	return 0;
-//}
+uint64
+sys_procinfo(void)
+{
+
+	struct pinfo p;
+	uint64 point;
+	//printf("\nwe are in sysprocinfo\n");
+	struct proc *current_proc = myproc();
+	//printf("Current process %d, size %d\n", current_proc->pid, current_proc->sz);
+	argaddr(0, &point);
+	//printf("Typecasted\n");
+	p.ppid = current_proc->parent->pid;
+	//printf("Got ppid\n");
+	p.page_usage = (current_proc->sz * 3)/(10000);
+	p.syscall_count = current_proc->sys_counter;
+	if(copyout(current_proc->pagetable, point, (char *)&p, sizeof(p)) < 0)
+	{
+		return -1;
+	}
+	//printf("copied //data above\n");
+	return 0;
+}

@@ -161,6 +161,9 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
+  // set up syscall counter
+  p->sys_counter = 0;
+
   return p;
 }
 
@@ -184,6 +187,7 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  p->sys_counter = 0;
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -326,6 +330,9 @@ fork(void)
   safestrcpy(np->name, p->name, sizeof(p->name));
 
   pid = np->pid;
+
+  // Initiralize new syscall counter for child (not needed)
+ //np->sys_counter = 0;
 
   release(&np->lock);
 
