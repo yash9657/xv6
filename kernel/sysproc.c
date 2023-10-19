@@ -89,3 +89,31 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+uint64
+sys_info(void)
+{
+	int param;
+	argint(0, &param);
+	if(param == 0)
+	{
+		return(proc_counter());
+	}
+	else if (param == 1)
+	{
+		return(count_system_calls);
+	}
+	else if (param == 2)
+	{
+		return(count_free_memory());
+	}
+	return -1;
+}
+//uint64
+//sys_procinfo(void)
+//{
+//
+//	struct procinfo *p;
+//	struct procinfo *ans = procinfo(p);
+//	printf("PPID: %d\n", ans->ppid);
+//	return 0;
+//}

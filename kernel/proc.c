@@ -57,6 +57,21 @@ procinit(void)
       p->kstack = KSTACK((int) (p - proc));
   }
 }
+int
+proc_counter(void)
+{
+	struct proc *p;
+	int count  = 0;
+	for(p = proc; p< &proc[NPROC]; p++)
+	{
+		if (p->state != UNUSED)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
 
 // Must be called with interrupts disabled,
 // to prevent race with process being moved
